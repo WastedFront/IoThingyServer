@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import hr.fer.zemris.zavrsni.iot.utils.Message;
+
 /**
  * Singleton class for storing simulator messages.
  * 
@@ -15,11 +17,11 @@ public class SimulatorMsgList {
 	/** Class instance. */
 	private static SimulatorMsgList instance = null;
 	/** List for storing messages. */
-	private static List<SimulatorMessage> messages;
+	private static List<Message> messages;
 
 	/** Private constructor for stoping instantiation. */
 	private SimulatorMsgList() {
-		messages = Collections.synchronizedList(new ArrayList<SimulatorMessage>());
+		messages = Collections.synchronizedList(new ArrayList<Message>());
 	}
 
 	/**
@@ -43,9 +45,9 @@ public class SimulatorMsgList {
 	 * Method for adding message into inner collection.
 	 * 
 	 * @param message
-	 *            simulator message
+	 *            client message
 	 */
-	public void addMessage(SimulatorMessage message) {
+	public void addMessage(Message message) {
 		if (!messages.contains(message))
 			messages.add(message);
 	}
@@ -54,18 +56,28 @@ public class SimulatorMsgList {
 	 * Method for removing message from inner collection.
 	 * 
 	 * @param message
-	 *            simulator message
+	 *            client message
 	 */
-	public void removeMessage(SimulatorMessage message) {
+	public void removeMessage(Message message) {
 		messages.remove(message);
 	}
 
 	/**
-	 * Method for getting messages.
+	 * Method for getting client messages.
 	 * 
-	 * @return list of simulator messages
+	 * @return list of client messages
 	 */
-	public List<SimulatorMessage> getMessages() {
+	public List<Message> getMessages() {
 		return messages;
+	}
+
+	/**
+	 * Method for adding all client messages.
+	 * 
+	 * @param list
+	 *            of client messages
+	 */
+	public void addAllMessages(List<Message> msgs) {
+		messages.addAll(msgs);
 	}
 }

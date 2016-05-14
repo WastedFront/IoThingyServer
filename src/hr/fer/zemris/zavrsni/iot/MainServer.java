@@ -3,8 +3,9 @@ package hr.fer.zemris.zavrsni.iot;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import hr.fer.zemris.zavrsni.iot.client.ClientMsgList;
 import hr.fer.zemris.zavrsni.iot.client.ClientServer;
-import hr.fer.zemris.zavrsni.iot.storage.ClientMsgsStore;
+import hr.fer.zemris.zavrsni.iot.storage.MessagesStoreClass;
 
 /**
  * Some fancy documentation.
@@ -14,6 +15,11 @@ import hr.fer.zemris.zavrsni.iot.storage.ClientMsgsStore;
  */
 public class MainServer {
 
+	/** Name of the xml file for client messages. */
+	private static final String FILENAME_CLIENT = "client_msgs.xml";
+	/** Name of the xml file for simulator messages. */
+	private static final String FILENAME_SIMULATOR = "client_msgs.xml";
+
 	/**
 	 * Store messages before this program is terminated.
 	 */
@@ -21,7 +27,7 @@ public class MainServer {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				try {
-					ClientMsgsStore.storeClientMessages();
+					MessagesStoreClass.storeClientMessages(FILENAME_CLIENT, ClientMsgList.getInstance().getMessages());
 				} catch (ParserConfigurationException | TransformerException e) {
 					System.err.println(e.toString());
 				}
@@ -46,8 +52,8 @@ public class MainServer {
 			}
 		}
 		try {
-			// učitaj spremljene TCP i UDP poruke u odgovarajuće liste
-			ClientMsgsStore.readStoredClientMessages();
+			// učitaj spremljene TCP i UDP poruke u odgovarajuće kolekcije
+			ClientMsgList.getInstance().addAllMessages(MessagesStoreClass.readStoredClientMessages(FILENAME_CLIENT));
 			new ClientServer(port);
 		} catch (Exception e) {
 			System.err.println(e.toString());

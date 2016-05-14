@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import hr.fer.zemris.zavrsni.iot.utils.Message;
 import hr.fer.zemris.zavrsni.iot.utils.MyUtils;
 
 /**
@@ -114,7 +115,7 @@ public class ClientServer {
 				if (message == "")
 					return;
 				// parse received message
-				ClientMessage tcpMsg = ClientMessage.parseClientMessage(message);
+				Message tcpMsg = Message.parseClientMessage(message);
 				// print message
 				logStream.println("**\n" + tcpMsg.toString() + "**");
 				// store message

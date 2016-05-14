@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <client_messages>
-<message id="64975695" previous_message_id="0">
+<message id="49782198" previous_message_id="00000000">
 <source_id>a8625740</source_id>
 <destination_id>a8625740</destination_id>
 <json_data>{"GPS":{"VALUES":[0,0,0],"NAMES":["LATITUDE","LONGITUDE","ALTITUDE"]}}</json_data>
+</message>
+<message id="42582626" previous_message_id="00000000">
+<source_id>a8625740</source_id>
+<destination_id>a8625740</destination_id>
+<json_data>{"GENYMOTION ACCELEROMETER":{"VALUES":[0,9.77621,0.81341],"NAMES":["X","Y","Z"]},"GPS":{"VALUES":[0,0,0],"NAMES":["LATITUDE","LONGITUDE","ALTITUDE"]}}</json_data>
 </message>
 </client_messages>

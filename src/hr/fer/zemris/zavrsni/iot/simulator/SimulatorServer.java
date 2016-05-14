@@ -111,7 +111,7 @@ public class SimulatorServer {
 //				if (message == "")
 //					return;
 //				// parse received message
-//				ClientMessage tcpMsg = ClientMessage.parseClientMessage(message);
+//				Message tcpMsg = Message.parseClientMessage(message);
 //				// print message
 //				logStream.println("**\n" + tcpMsg.toString() + "**");
 //				// store message

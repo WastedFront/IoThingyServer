@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import hr.fer.zemris.zavrsni.iot.utils.Message;
+
 /**
  * Singleton class for storing client messages.
  * 
@@ -15,11 +17,11 @@ public class ClientMsgList {
 	/** Class instance. */
 	private static ClientMsgList instance = null;
 	/** List for storing messages. */
-	private static List<ClientMessage> messages;
+	private static List<Message> messages;
 
 	/** Private constructor for stoping instantiation. */
 	private ClientMsgList() {
-		messages = Collections.synchronizedList(new ArrayList<ClientMessage>());
+		messages = Collections.synchronizedList(new ArrayList<Message>());
 	}
 
 	/**
@@ -45,7 +47,7 @@ public class ClientMsgList {
 	 * @param message
 	 *            client message
 	 */
-	public void addMessage(ClientMessage message) {
+	public void addMessage(Message message) {
 		if (!messages.contains(message))
 			messages.add(message);
 	}
@@ -56,7 +58,7 @@ public class ClientMsgList {
 	 * @param message
 	 *            client message
 	 */
-	public void removeMessage(ClientMessage message) {
+	public void removeMessage(Message message) {
 		messages.remove(message);
 	}
 
@@ -65,7 +67,17 @@ public class ClientMsgList {
 	 * 
 	 * @return list of client messages
 	 */
-	public List<ClientMessage> getMessages() {
+	public List<Message> getMessages() {
 		return messages;
+	}
+
+	/**
+	 * Method for adding all client messages.
+	 * 
+	 * @param list
+	 *            of client messages
+	 */
+	public void addAllMessages(List<Message> msgs) {
+		messages.addAll(msgs);
 	}
 }
