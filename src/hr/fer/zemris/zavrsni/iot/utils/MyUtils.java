@@ -14,6 +14,13 @@ public class MyUtils {
 	/** Representation of idle return. */
 	public static final String RETURN_IDLE = "IDLE\r\n";
 
+	/**
+	 * Method for getting return message for client.
+	 * 
+	 * @param srcID
+	 *            ID of client
+	 * @return return message
+	 */
 	public static String getReturnClientMessage(String srcID) {
 		Message rmMsg = null;
 		String returnMsg = RETURN_IDLE;

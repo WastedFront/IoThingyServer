@@ -1,36 +1,26 @@
 package hr.fer.zemris.zavrsni.iot.simulator;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.io.PrintWriter;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.ServerSocket;
-import java.net.Socket;
 
-import hr.fer.zemris.zavrsni.iot.utils.MyUtils;
+import hr.fer.zemris.zavrsni.iot.utils.Message;
 
 /**
- * Server for TCP connection. It listen for new connection on given port. When
- * there is new client, it makes new thread for handling client. If there is
- * some data which needs to be send to client, it uses same connection for
- * response. Default port for listening is 25000. All received messages are
- * stored in {@code ClientMsgList}. If there is no data for client, it sends
- * "IDLE".
+ * SOmething
  * 
  * @author Nikola Presečki
  * @version 1.0
  */
 public class SimulatorServer {
 
-	/** Server socket for connection. */
-	private ServerSocket serverSocket;
-	/** Counter of active workers. */
-	private int numOfWorkers = 0;
+	/** Datagram socket for connection. */
+	private DatagramSocket serverSocket;
 	/** Output stream on which server will write its 'log' */
 	private PrintStream logStream = System.out;
-	/** Output stream on which server will write errors */
-	private PrintStream errorStream = System.err;
 
 	/**
 	 * Constructor with no arguments. It defines that default port for listening
@@ -40,7 +30,7 @@ public class SimulatorServer {
 	 *             if there is problem with server
 	 */
 	public SimulatorServer() throws Exception {
-		this(25000);
+		this(20000);
 	}
 
 	/**
@@ -52,7 +42,7 @@ public class SimulatorServer {
 	 *             if there is problem with server
 	 */
 	public SimulatorServer(int port) throws Exception {
-		serverSocket = new ServerSocket(port);
+		serverSocket = new DatagramSocket(port);
 		startServer();
 	}
 
@@ -61,89 +51,36 @@ public class SimulatorServer {
 	 * 
 	 * @throws IOException
 	 *             if there is problem with {@link ServerSocket}.
-	 * @throws InterruptedException
-	 *             if there is problem while sleeping when there is too much
-	 *             workers
 	 */
-	private void startServer() throws IOException, InterruptedException {
-		logStream.println("Server started listening on port: " + serverSocket.getLocalPort() + "\n");
+	private void startServer() throws IOException {
+		logStream.println("Simulator server started listening on port: " + serverSocket.getLocalPort() + "\n");
+		byte[] receiveData = new byte[1024];
 		while (true) {
-			
+			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+			serverSocket.receive(receivePacket);
+			String msg = new String(receivePacket.getData());
+			Message message = Message.parseSimulatorMessage(msg);
+			SimulatorMsgList.getInstance().addMessage(message);
 		}
 	}
 
-//	/**
-//	 * Class which will handler communication with client (thing).
-//	 * 
-//	 * @author Nikola Presečki
-//	 * @version 1.0
-//	 *
-//	 */
-//	private class ClientHandler implements Runnable {
-//
-//		/**
-//		 * Socket for handling connection.
-//		 */
-//		private Socket socket;
-//
-//		/**
-//		 * Constructor with one argument.
-//		 * 
-//		 * @param socket
-//		 *            socket on which connection is established
-//		 */
-//		public ClientHandler(Socket socket) {
-//			this.socket = socket;
-//			++numOfWorkers;
-//		}
-//
-//		@Override
-//		public void run() {
-//			printDashes();
-//			System.out.println("New connection accepted " + socket.getInetAddress() + ":" + socket.getPort()
-//					+ "\nWorker number:" + numOfWorkers);
-//			try (BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-//					PrintWriter output = new PrintWriter(socket.getOutputStream(), true);) {
-//				// read message
-//				String message = input.readLine();
-//				if (message == null)
-//					return;
-//				if (message == "")
-//					return;
-//				// parse received message
-//				Message tcpMsg = Message.parseClientMessage(message);
-//				// print message
-//				logStream.println("**\n" + tcpMsg.toString() + "**");
-//				// store message
-//				ClientMsgList.getInstance().addMessage(tcpMsg);
-//				// check if there is some return message for this client
-//				String returnMsg = MyUtils.getReturnClientMessage(tcpMsg.getSrcID());
-//				// print return message
-//				logStream.println("++\nReturn message:\n" + returnMsg + "++");
-//				output.println(returnMsg);
-//				output.flush();
-//			} catch (IOException e) {
-//				errorStream.println(e.toString());
-//			} finally {
-//				try {
-//					socket.close();
-//					logStream.println("Connection closed by client");
-//				} catch (IOException e) {
-//					errorStream.println(e.toString());
-//				} finally {
-//					printDashes();
-//					--numOfWorkers;
-//				}
-//			}
-//		}
-//
-//		/**
-//		 * Method for printing 80 dashes in a single line.
-//		 */
-//		private void printDashes() {
-//			for (int i = 0; i < 80; ++i)
-//				logStream.print('-');
-//			logStream.println();
-//		}
-//	}
+	/**
+	 * Method for sending datagram packet to given adress and port.
+	 * 
+	 * @param ipAddress
+	 *            ip adress of server
+	 * @param port
+	 *            port on which server is listening
+	 * @param data
+	 *            data which will be send
+	 * @throws IOException
+	 *             if there is problem with sending packet
+	 */
+	public static void sendMessage(String ipAddress, int port, byte[] data) throws IOException {
+		DatagramSocket clientSocket = new DatagramSocket();
+		InetAddress IPAddress = InetAddress.getByName(ipAddress);
+		DatagramPacket sendPacket = new DatagramPacket(data, data.length, IPAddress, port);
+		clientSocket.send(sendPacket);
+		clientSocket.close();
+	}
 }

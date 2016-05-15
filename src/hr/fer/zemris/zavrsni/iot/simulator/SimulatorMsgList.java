@@ -80,4 +80,27 @@ public class SimulatorMsgList {
 	public void addAllMessages(List<Message> msgs) {
 		messages.addAll(msgs);
 	}
+	
+	/**
+	 * Method for checking if list is empty.
+	 * 
+	 * @return true if list is empty, otherwise false
+	 */
+	public boolean isEmpty() {
+		return messages.isEmpty();
+	}
+
+	/**
+	 * Method for 'poping' (get and remove) first message from collection.
+	 * 
+	 * @return message or null if collection is empty
+	 */
+	public Message popFirstMessage() {
+		if (!messages.isEmpty()) {
+			Message msg = messages.get(0);
+			messages.remove(0);
+			return msg;
+		}
+		return null;
+	}
 }

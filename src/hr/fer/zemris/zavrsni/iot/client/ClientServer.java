@@ -67,7 +67,7 @@ public class ClientServer {
 	 *             workers
 	 */
 	private void startServer() throws IOException, InterruptedException {
-		logStream.println("Server started listening on port: " + serverSocket.getLocalPort() + "\n");
+		logStream.println("Client server started listening on port: " + serverSocket.getLocalPort() + "\n");
 		while (true) {
 			Socket socket = serverSocket.accept();
 			while (numOfWorkers > 1000)
