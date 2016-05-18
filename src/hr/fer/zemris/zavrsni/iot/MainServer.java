@@ -89,7 +89,7 @@ public class MainServer {
 					simulatorSendPort);
 			clientServerThread.start();
 			simulatorServerThread.start();
-			sendToSimulatorThread.start();
+			//sendToSimulatorThread.start();
 		} catch (Exception e) {
 			System.err.println(e.toString());
 		}

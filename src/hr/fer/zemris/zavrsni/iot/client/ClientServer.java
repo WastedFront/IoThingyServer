@@ -8,8 +8,8 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import hr.fer.zemris.zavrsni.iot.simulator.SimulatorMsgList;
 import hr.fer.zemris.zavrsni.iot.utils.Message;
-import hr.fer.zemris.zavrsni.iot.utils.MyUtils;
 
 /**
  * Server for client TCP connection. It listen for new connection on given port.
@@ -89,6 +89,8 @@ public class ClientServer {
 		 * Socket for handling connection.
 		 */
 		private Socket socket;
+		/** Representation of idle return. */
+		private static final String RETURN_IDLE = "IDLE\r\n";
 
 		/**
 		 * Constructor with one argument.
@@ -120,12 +122,15 @@ public class ClientServer {
 				logStream.println("**\n" + tcpMsg.toString() + "**");
 				// store message
 				ClientMsgList.getInstance().addMessage(tcpMsg);
-				// check if there is some return message for this client
-				String returnMsg = MyUtils.getReturnClientMessage(tcpMsg.getSrcID());
-				// print return message
-				logStream.println("++\nReturn message:\n" + returnMsg + "++");
-				output.println(returnMsg);
-				output.flush();
+				String returnMsg;
+				do {
+					// check if there is some return message for this client
+					returnMsg = getReturnClientMessage(tcpMsg.getSrcID());
+					// print return message
+					logStream.println("++\nReturn message:\n" + returnMsg + "++");
+					output.println(returnMsg);
+					output.flush();
+				} while (!RETURN_IDLE.equals(returnMsg));
 			} catch (IOException e) {
 				errorStream.println(e.toString());
 			} finally {
@@ -139,6 +144,27 @@ public class ClientServer {
 					--numOfWorkers;
 				}
 			}
+		}
+
+		/**
+		 * Method for getting return message for client.
+		 * 
+		 * @param srcID
+		 *            ID of client
+		 * @return return message
+		 */
+		public String getReturnClientMessage(String srcID) {
+			Message rmMsg = null;
+			String returnMsg = RETURN_IDLE;
+			for (Message message : SimulatorMsgList.getInstance().getMessages()) {
+				if (srcID.equals(message.getDestID())) {
+					rmMsg = message;
+					returnMsg = message.makeReturnMessageForClient();
+					break;
+				}
+			}
+			SimulatorMsgList.getInstance().removeMessage(rmMsg);
+			return returnMsg;
 		}
 
 		/**
