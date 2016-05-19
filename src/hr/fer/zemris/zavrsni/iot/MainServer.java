@@ -8,6 +8,7 @@ import hr.fer.zemris.zavrsni.iot.client.ClientServer;
 import hr.fer.zemris.zavrsni.iot.simulator.SimulatorMsgList;
 import hr.fer.zemris.zavrsni.iot.simulator.SimulatorServer;
 import hr.fer.zemris.zavrsni.iot.storage.MessagesStoreClass;
+import hr.fer.zemris.zavrsni.iot.utils.Message;
 
 /**
  * Class containg main method which runs proper servers. There are 4 command
@@ -82,6 +83,7 @@ public class MainServer {
 			ClientMsgList.getInstance().addAllMessages(MessagesStoreClass.readStoredClientMessages(FILENAME_CLIENT));
 			SimulatorMsgList.getInstance()
 					.addAllMessages(MessagesStoreClass.readStoredClientMessages(FILENAME_SIMULATOR));
+			populateSimulatorListWithMsg();
 			// start all threads that you need
 			ClientServerThread clientServerThread = new ClientServerThread(clientPort);
 			SimulatorServerThread simulatorServerThread = new SimulatorServerThread(simulatorRecievePort);
@@ -89,10 +91,17 @@ public class MainServer {
 					simulatorSendPort);
 			clientServerThread.start();
 			simulatorServerThread.start();
-			//sendToSimulatorThread.start();
+			sendToSimulatorThread.start();
 		} catch (Exception e) {
 			System.err.println(e.toString());
 		}
+	}
+
+	private static void populateSimulatorListWithMsg() {
+		SimulatorMsgList.getInstance().addMessage(new Message("12345678", "THING_12", "cce1f5c7",
+				"{\"CMD\":\"GET\", \"SENSOR\":[\"GPS\"]}", "00000000", 0));
+		SimulatorMsgList.getInstance().addMessage(new Message("87654321", "THING_12", "cce1f5c7",
+				"{\"CMD\":\"GET\", \"SENSOR\":[\"GPS\"]}", "00000000", 0));
 	}
 
 	/**

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<messages>
+<message id="12345678" previous_message_id="00000000">
+<source_id>THING_12</source_id>
+<destination_id>8625d740</destination_id>
+<json_data>{"CMD":"GET", "SENSOR":["GPS"]}</json_data>
+<encryption>0</encryption>
+</message>
+<message id="87654321" previous_message_id="00000000">
+<source_id>THING_12</source_id>
+<destination_id>8625d740</destination_id>
+<json_data>{"CMD":"GET", "SENSOR":["GPS"]}</json_data>
+<encryption>0</encryption>
+</message>
+</messages>

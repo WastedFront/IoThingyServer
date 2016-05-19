@@ -90,7 +90,7 @@ public class ClientServer {
 		 */
 		private Socket socket;
 		/** Representation of idle return. */
-		private static final String RETURN_IDLE = "IDLE\r\n";
+		private static final String RETURN_IDLE = "IDLE";
 
 		/**
 		 * Constructor with one argument.
@@ -127,10 +127,10 @@ public class ClientServer {
 					// check if there is some return message for this client
 					returnMsg = getReturnClientMessage(tcpMsg.getSrcID());
 					// print return message
-					logStream.println("++\nReturn message:\n" + returnMsg + "++");
+					logStream.println("++\nReturn message:\n" + returnMsg + "\n++");
 					output.println(returnMsg);
-					output.flush();
 				} while (!RETURN_IDLE.equals(returnMsg));
+				output.flush();
 			} catch (IOException e) {
 				errorStream.println(e.toString());
 			} finally {
