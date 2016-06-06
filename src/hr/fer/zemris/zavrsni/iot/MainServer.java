@@ -31,7 +31,6 @@ public class MainServer {
     private static final String FILENAME_CLIENT = "client_msgs.xml";
     /** Name of the xml file for simulator messages. */
     private static final String FILENAME_SIMULATOR = "simulator_msgs.xml";
-    /** */
 
     /**
      * Store messages before this program is terminated.
