@@ -1,15 +1,11 @@
 package hr.fer.zemris.zavrsni.iot.client;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
-
 import hr.fer.zemris.zavrsni.iot.simulator.SimulatorMsgList;
 import hr.fer.zemris.zavrsni.iot.utils.Message;
+
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * Server for client TCP connection. It listen for new connection on given port.
@@ -114,7 +110,7 @@ public class ClientServer {
 				String message = input.readLine();
 				if (message == null)
 					return;
-				if (message == "")
+				if ("".equals(message))
 					return;
 				// parse received message
 				Message tcpMsg = Message.parseClientMessage(message);
